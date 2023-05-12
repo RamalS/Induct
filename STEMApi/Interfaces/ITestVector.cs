@@ -20,5 +20,6 @@ namespace Interfaces
         /// <param name="ids">The Id's of the TestVectors to remove</param>
         /// <returns>The remaining items in the list after removing</returns>
         List<TestVector> Remove(List<int> ids);
+        List<TestVector> GenerateAll(List<Sample> samples, List<TestInputCollection> testInputCollection);
     }
 }

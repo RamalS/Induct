@@ -9,60 +9,53 @@ namespace STEMApi.Controllers
     [ApiController]
     public class TestVectorController : ControllerBase
     {
-        private readonly IInputCondition IInputCondition;
         private readonly ISample ISample;
+        private readonly ITestVector ITestVector;
 
-        public TestVectorController(IInputCondition iInputCondition, ISample iSample)
+        public TestVectorController(ISample iSample, ITestVector iTestVector)
         {
-            IInputCondition = iInputCondition;
             ISample = iSample;
+            ITestVector = iTestVector;
         }
 
-        private void generateCombinations(List<List<int>> indices, int index, List<TestInputCollection> filteredCollection, List<int> vectorIndices) {
-            if (index == filteredCollection.Count) {
-                List<int> list = new List<int>();
-                list.AddRange(vectorIndices);
-                indices.Add(list);
-                return;
-            }
-
-            for (int i = 0; i < filteredCollection[index].TestPoints.Count; i++) {
-                vectorIndices.Add(i);
-                generateCombinations(indices, index + 1, filteredCollection, vectorIndices);
-                vectorIndices.RemoveAt(vectorIndices.Count - 1);
-            }
-         }
-
+        /// <summary>
+        /// Return all the previously generated TestVectors
+        /// </summary>
+        /// <param name="testInputCollection">The list of user input's from which the TestVectors will be generated</param>
+        /// <returns></returns>
         [HttpPost]
-        public IActionResult GetAll(List<TestInputCollection> testInputCollection)
+        public IActionResult GetAll()
         {
-            List<TestVector> testVectors = new List<TestVector>();
-            List<Sample> samples = new List<Sample>() { new Sample { Id = 1 } };
+            return Ok(ITestVector.GetAll());
+        }
 
-            foreach (Sample sample in samples) {
-              // TODO: optimize
-                List<TestInputCollection> filteredCollection = testInputCollection.Where(x => x.SampleIds.Contains(sample.Id)).ToList();
-                
-                List<List<int>> indices = new List<List<int>>();
-                List<int> dummy = new List<int>();
-                generateCombinations(indices, 0, filteredCollection, dummy);
+        /// <summary>
+        /// Generates all the TestVectors and returns it for the user
+        /// </summary>
+        /// <param name="testInputCollection">The list of user input's from which the TestVectors will be generated</param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult GenerateAll(List<TestInputCollection> testInputCollection)
+        {
+            return Ok(ITestVector.GenerateAll(ISample.GetAll(), testInputCollection));
+        }
 
-                for (int i = 0; i < indices.Count; i++) {
-                    TestVector testVector = new TestVector();
-                    for (int j = 0; j < indices[i].Count; j++) {
-                        SelectedInput selectedInput = new SelectedInput();
-                        selectedInput.InputConditionId = filteredCollection[j].InputConditionId;
-                        selectedInput.Value = filteredCollection[j].TestPoints[indices[i][j]].Value;
-
-                        testVector.SelectedInput.Add(selectedInput);
-                    }
-
-                    testVectors.Add(testVector);
-                }
+        /// <summary>
+        /// Remove the unselected TestVectors
+        /// </summary>
+        /// <param name="ids">List of TestVector Id's to be removed</param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult RemoveUnselected(List<int> ids)
+        {
+            ITestVector.Remove(ids);
+            List<Sample> samples = new List<Sample>();
+            foreach (var item in ITestVector.GetAll().GroupBy(x => x.SampleId))
+            {
+                Sample? sample = ISample.GetById(item.Key);
+                if (sample != null) samples.Add(sample);
             }
-
-
-            return Ok(testVectors);
+            return Ok(samples);
         }
     }
 }

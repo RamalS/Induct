@@ -1,5 +1,4 @@
 using Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IInputCondition, InputConditionService>();
 builder.Services.AddScoped<ISample, SampleService>();
 builder.Services.AddScoped<ITestVector, TestVectorService>();
+builder.Services.AddScoped<ICsvService, CsvService>();
 
 builder.Services.AddCors();
 
