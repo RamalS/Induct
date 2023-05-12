@@ -21,18 +21,19 @@ namespace STEMApi.Controllers
         [HttpGet]
         public IActionResult GetAll(List<TestInputCollection> testInputCollection)
         {
-            List<TestVector> testVectors = new List<TestVector>();
-            
-            foreach (Sample sample in ISample.GetAll()) {
-              List<TestInputCollection> filteredCollection = testInputCollection.Where(x => x.SampleIds.Contains(sample.Id)).ToList();
-              foreach(TestInputCollection coll in filteredCollection)
-              {
-                foreach(TestInputCollection coll2 in filteredCollection.Where(x => x.Id != coll.Id))
-              }
-            }
+            //List<TestVector> testVectors = new List<TestVector>();
+
+            //foreach (Sample sample in ISample.GetAll()) {
+            //  List<TestInputCollection> filteredCollection = testInputCollection.Where(x => x.SampleIds.Contains(sample.Id)).ToList();
+            //  foreach(TestInputCollection coll in filteredCollection)
+            //  {
+            //    foreach(TestInputCollection coll2 in filteredCollection.Where(x => x.Id != coll.Id))
+            //  }
+            //}
 
 
-            return Ok(testVectors);
+            //return Ok(testVectors);
+            return Ok();
         }
     }
 }

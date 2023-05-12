@@ -15,7 +15,7 @@ namespace STEMApi.Controllers
     {
         public DataController()
         {
-            
+
         }
 
         [HttpPost]
@@ -48,7 +48,22 @@ namespace STEMApi.Controllers
                 JSONInput? jsonInput = JsonSerializer.Deserialize<JSONInput>(requestBody);
                 if (jsonInput == null) return BadRequest();
                 AppData.JsonInput = jsonInput;
-                return Ok(jsonInput);
+                List<TestVector> list = new List<TestVector>()
+                {
+                    new TestVector{Id = 1, SelectedInput = new List<SelectedInput>()
+                        {
+                            new SelectedInput { InputConditionId = 1, Value = 1},
+                            new SelectedInput { InputConditionId = 2, Value = 8},
+                        }
+                    },
+                    new TestVector{Id = 2, SelectedInput = new List<SelectedInput>()
+                        {
+                            new SelectedInput { InputConditionId = 1, Value = 10},
+                            new SelectedInput { InputConditionId = 2, Value = 7},
+                        }
+                    }
+                };
+                return Ok(list);
             }
             catch { return BadRequest(); }
         }
