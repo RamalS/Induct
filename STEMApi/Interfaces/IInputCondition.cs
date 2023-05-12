@@ -10,5 +10,6 @@ namespace Interfaces
     public interface IInputCondition
     {
         List<InputCondition> GetAll();
+        InputCondition? GetById(int id);
     }
 }

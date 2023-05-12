@@ -14,5 +14,7 @@ namespace Services
         private List<InputCondition> getList { get => AppData.JsonInput.Project.InputConditions; }
 
         public List<InputCondition> GetAll() => getList;
+
+        public InputCondition? GetById(int id) => getList.SingleOrDefault(x => x.Id == id);
     }
 }

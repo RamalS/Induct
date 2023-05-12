@@ -10,5 +10,6 @@ namespace Interfaces
     public interface ISample
     {
         List<Sample> GetAll();
+        Sample? GetById(int id)
     }
 }

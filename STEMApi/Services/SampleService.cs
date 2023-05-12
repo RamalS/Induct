@@ -14,5 +14,7 @@ namespace Services
         private List<Sample> getList { get => AppData.JsonInput.Project.Samples; }
 
         public List<Sample> GetAll() => getList;
+
+        public Sample? GetById(int id) => getList.SingleOrDefault(x => x.Id == id);
     }
 }
