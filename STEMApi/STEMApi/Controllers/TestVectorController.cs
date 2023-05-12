@@ -24,7 +24,7 @@ namespace STEMApi.Controllers
         /// <param name="testInputCollection">The list of user input's from which the TestVectors will be generated</param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult GetAll(List<TestInputCollection> testInputCollection)
+        public IActionResult GenerateAll(List<TestInputCollection> testInputCollection)
         {
             return Ok(ITestVector.GenerateAll(ISample.GetAll(), testInputCollection));
         }
