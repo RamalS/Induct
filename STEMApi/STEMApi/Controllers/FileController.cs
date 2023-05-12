@@ -40,7 +40,7 @@ namespace STEMApi.Controllers
             {
                 ICsvService.SaveToCsv(path, sample.Name, new List<string> { "Id", "temp", "drain" }, AppData.TestVectors.Where(x => x.SampleId == sample.Id).ToList());
             }
-            return Ok("Files" + fileName);
+            return Ok("Files/" + fileName);
         }
 
         /// <summary>
