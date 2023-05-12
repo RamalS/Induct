@@ -1,4 +1,5 @@
 ﻿using Common;
+using Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -15,7 +16,7 @@ namespace STEMApi.Controllers
     {
         public DataController()
         {
-            
+
         }
 
         [HttpPost]
@@ -48,7 +49,25 @@ namespace STEMApi.Controllers
                 JSONInput? jsonInput = JsonSerializer.Deserialize<JSONInput>(requestBody);
                 if (jsonInput == null) return BadRequest();
                 AppData.JsonInput = jsonInput;
-                return Ok(jsonInput);
+                TestVectorViewModel asd = new()
+                {
+                    Labels = new List<string>() { "Id", "Temperature", "Drainage" },
+                    TestVectors = new List<TestVector>() {
+                        new TestVector{Id = 1, SelectedInput = new List<SelectedInput>()
+                            {
+                                new SelectedInput { InputConditionId = 1, Value = 1},
+                                new SelectedInput { InputConditionId = 2, Value = 8},
+                            }
+                        },
+                        new TestVector{Id = 2, SelectedInput = new List<SelectedInput>()
+                            {
+                                new SelectedInput { InputConditionId = 1, Value = 10},
+                                new SelectedInput { InputConditionId = 2, Value = 7},
+                            }
+                        }
+                    }
+                };
+                return Ok(asd);
             }
             catch { return BadRequest(); }
         }
