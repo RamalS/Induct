@@ -20,7 +20,9 @@ namespace STEMApi.Controllers
 
         private void generateCombinations(List<List<int>> indices, int index, List<TestInputCollection> filteredCollection, List<int> vectorIndices) {
             if (index == filteredCollection.Count) {
-                indices.Add(vectorIndices);
+                List<int> list = new List<int>();
+                list.AddRange(vectorIndices);
+                indices.Add(list);
                 return;
             }
 
@@ -35,20 +37,22 @@ namespace STEMApi.Controllers
         public IActionResult GetAll(List<TestInputCollection> testInputCollection)
         {
             List<TestVector> testVectors = new List<TestVector>();
-            
-            foreach (Sample sample in ISample.GetAll()) {
+            List<Sample> samples = new List<Sample>() { new Sample { Id = 1 } };
+
+            foreach (Sample sample in samples) {
               // TODO: optimize
                 List<TestInputCollection> filteredCollection = testInputCollection.Where(x => x.SampleIds.Contains(sample.Id)).ToList();
                 
                 List<List<int>> indices = new List<List<int>>();
-                generateCombinations(indices, 0, filteredCollection, new List<int>());
+                List<int> dummy = new List<int>();
+                generateCombinations(indices, 0, filteredCollection, dummy);
 
                 for (int i = 0; i < indices.Count; i++) {
                     TestVector testVector = new TestVector();
                     for (int j = 0; j < indices[i].Count; j++) {
                         SelectedInput selectedInput = new SelectedInput();
-                        selectedInput.InputConditionId = filteredCollection[i].InputConditionId;
-                        selectedInput.Value = indices[i][j];
+                        selectedInput.InputConditionId = filteredCollection[j].InputConditionId;
+                        selectedInput.Value = filteredCollection[j].TestPoints[indices[i][j]].Value;
 
                         testVector.SelectedInput.Add(selectedInput);
                     }
