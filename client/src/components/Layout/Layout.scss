@@ -6,7 +6,6 @@ $sidebar-width: 350px;
     height: 100vh;
 
     .sidebar {
-        display: flex;
         background: #23282D;
         height: 100%;
         width: 100%;
@@ -17,6 +16,7 @@ $sidebar-width: 350px;
     .main-container {
         background: #343A40;
         height: 100%;
-        width: 100%;   
+        width: 100%;
+        padding: 40px 30px;
     }
 }

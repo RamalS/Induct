@@ -3,3 +3,7 @@ export interface TestPoint {
     samples: number[];
     testPoints: number[];
 }
+
+export interface TestPointJson {
+    file: FileList;
+}

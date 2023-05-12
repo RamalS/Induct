@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Layout, Sidebar, MainContainer } from "../components/Layout";
 import { TestPoint } from "../ModelTypes";
+import { UploadJson } from "../features/TestPoint/UploadJson/UploadJson";
 import { useForm } from "react-hook-form";
 import Input from "../components/Input/Input";
+import { NoData } from "../features/TestPoint/NoData/NoData";
 
 const Main = () => {
   const {
@@ -23,15 +25,18 @@ const Main = () => {
     <>
       <Layout>
         <Sidebar>
-          <p className="text-16 text-bold">Enter test points</p>
-          <Input
+          <h1 className="text-16 text-bold w-100">Enter test points</h1>
+          {/* <Input
             control={control}
             name="inputCondition"
             label="Input condition"
-          />
+          /> */}
+          <br />
+          <UploadJson />
+
         </Sidebar>
         <MainContainer>
-          <h1>Main</h1>
+          <NoData />
         </MainContainer>
       </Layout>
     </>
