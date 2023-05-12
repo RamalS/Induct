@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Interfaces;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    public class CsvService
+    public class CsvService : ICsvService
     {
         public void SaveToCsv(string fileName, string sampleName, List<string> labels, List<TestVector> testVectors)
         {

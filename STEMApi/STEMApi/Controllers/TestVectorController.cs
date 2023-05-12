@@ -37,9 +37,8 @@ namespace STEMApi.Controllers
         public IActionResult GetAll(List<TestInputCollection> testInputCollection)
         {
             List<TestVector> testVectors = new List<TestVector>();
-            List<Sample> samples = new List<Sample>() { new Sample { Id = 1 } };
 
-            foreach (Sample sample in samples) {
+            foreach (Sample sample in ISample.GetAll()) {
               // TODO: optimize
                 List<TestInputCollection> filteredCollection = testInputCollection.Where(x => x.SampleIds.Contains(sample.Id)).ToList();
                 
@@ -50,6 +49,7 @@ namespace STEMApi.Controllers
                 for (int i = 0; i < indices.Count; i++) {
                     TestVector testVector = new TestVector();
                     for (int j = 0; j < indices[i].Count; j++) {
+                        testVector.SampleId = sample.Id;
                         SelectedInput selectedInput = new SelectedInput();
                         selectedInput.InputConditionId = filteredCollection[j].InputConditionId;
                         selectedInput.Value = filteredCollection[j].TestPoints[indices[i][j]].Value;
