@@ -1,0 +1,22 @@
+$sidebar-width: 350px;
+
+.layout {
+    display: grid;
+    grid-template-columns: $sidebar-width calc(100% - $sidebar-width);
+    height: 100vh;
+
+    .sidebar {
+        display: flex;
+        background: #23282D;
+        height: 100%;
+        width: 100%;
+        // justify-content: center;
+        padding: 64px 40px;
+    }
+    
+    .main-container {
+        background: #343A40;
+        height: 100%;
+        width: 100%;   
+    }
+}
