@@ -50,7 +50,8 @@ namespace Services
             {
                 // Filter the test input collections based on the sample's ID
                 List<TestInputCollection> filteredCollection = testInputCollection.Where(x => x.SampleIds.Contains(sample.Id)).ToList();
-
+                foreach (TestInputCollection testInput in filteredCollection)
+                    testInput.TestPoints = testInput.TestPoints.OrderBy(x => x.Value).ToList();
                 // Generate combinations of indices for the filtered test input collections
                 List<List<int>> indices = new List<List<int>>();
                 List<int> dummy = new List<int>();
@@ -95,10 +96,10 @@ namespace Services
         private void GenerateCombinations(List<List<int>> indices, int index, List<TestInputCollection> filteredCollection, List<int> vectorIndices)
         {
             // Base cases: 
-            // 1. If we generated 1000 test indices do not generate any more.
+            // 1. If we generated 150 test indices do not generate any more.
             // 2. If we have processed all test input collections,
             // add the current combination of indices to the list and return.
-            if (indices.Count == 1000)
+            if (indices.Count == 150)
             {
                 return;
             }

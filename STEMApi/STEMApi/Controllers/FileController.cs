@@ -51,20 +51,6 @@ namespace STEMApi.Controllers
         [HttpGet]
         public IActionResult ExportSingle(int sampleId)
         {
-            //List<TestVector> vector = new List<TestVector>() {
-            //            new TestVector{Id = 1, SelectedInput = new List<SelectedInput>()
-            //                {
-            //                    new SelectedInput { InputConditionId = 1, Value = 1},
-            //                    new SelectedInput { InputConditionId = 2, Value = 8},
-            //                }
-            //            },
-            //            new TestVector{Id = 2, SelectedInput = new List<SelectedInput>()
-            //                {
-            //                    new SelectedInput { InputConditionId = 1, Value = 10},
-            //                    new SelectedInput { InputConditionId = 2, Value = 7},
-            //                }
-            //            }
-            //        };
             string fileName = "export" + DateTime.Now.ToString("ddmmyyyyHHmmss") + ".csv";
             ICsvService.SaveToCsv(Path.Combine(IWebHostEnvironment.ContentRootPath, "Files", fileName), "Sample1", new List<string> { "Id", "temp", "drain" }, /*vector*/AppData.TestVectors.Where(x => x.SampleId == sampleId).ToList());
             return Ok("Files/" + fileName);

@@ -28,5 +28,23 @@ namespace STEMApi.Controllers
         {
             return Ok(ITestVector.GenerateAll(ISample.GetAll(), testInputCollection));
         }
+
+        /// <summary>
+        /// Remove the unselected TestVectors
+        /// </summary>
+        /// <param name="ids">List of TestVector Id's to be removed</param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult RemoveUnselected(List<int> ids)
+        {
+            ITestVector.Remove(ids);
+            List<Sample> samples = new List<Sample>();
+            foreach (var item in ITestVector.GetAll().GroupBy(x => x.SampleId))
+            {
+                Sample? sample = ISample.GetById(item.Key);
+                if (sample != null) samples.Add(sample);
+            }
+            return Ok(samples);
+        }
     }
 }
