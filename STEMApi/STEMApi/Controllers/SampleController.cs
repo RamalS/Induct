@@ -14,6 +14,10 @@ namespace STEMApi.Controllers
             ISample = iSample;
         }
 
+        /// <summary>
+        /// Returns all the Samples
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetAll()
         {

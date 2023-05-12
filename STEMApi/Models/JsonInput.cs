@@ -9,6 +9,6 @@ namespace Models
     public class JSONInput
     {
         public Project Project { get; set; } = new Project();
-        public List<TestPoint> TestPointCollections { get; set; } = new List<TestPoint>();
+        public List<TestInputCollection> TestPointCollections { get; set; } = new List<TestInputCollection>();
     }
 }

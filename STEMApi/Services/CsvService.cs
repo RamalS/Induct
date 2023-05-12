@@ -10,11 +10,17 @@ namespace Services
 {
     public class CsvService : ICsvService
     {
+        /// <summary>
+        /// Method for exporting the TestVectors to a .csv file
+        /// </summary>
+        /// <param name="fileName">The location where to save the file</param>
+        /// <param name="sampleName">The sample's name</param>
+        /// <param name="labels">The list of labels</param>
+        /// <param name="testVectors">The list of TestVectors to export</param>
         public void SaveToCsv(string fileName, string sampleName, List<string> labels, List<TestVector> testVectors)
         {
-            using (var writer = new StreamWriter(fileName))
+            using (var writer = new StreamWriter(fileName, true))
             {
-
                 writer.WriteLine(sampleName);
                 writer.WriteLine("Id," + string.Join(",", labels));
 

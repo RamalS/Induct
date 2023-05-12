@@ -14,11 +14,20 @@ namespace STEMApi.Controllers
     [ApiController]
     public class DataController : ControllerBase
     {
-        public DataController()
+        private readonly IInputCondition IInputCondition;
+        private readonly ITestVector ITestVector;
+        private readonly ISample ISample;
+        public DataController(IInputCondition iInputCondition, ITestVector iTestVector, ISample iSample)
         {
-
+            IInputCondition = iInputCondition;
+            ITestVector = iTestVector;
+            ISample = iSample;
         }
 
+        /// <summary>
+        /// Method that parses the data from the json body to some C# classes
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Upload()
         {
@@ -33,6 +42,10 @@ namespace STEMApi.Controllers
             return Ok(jsonInput);
         }
 
+        /// <summary>
+        /// Method that parses the data from the json file to some C# classes
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> UploadFile()
         {
@@ -49,25 +62,27 @@ namespace STEMApi.Controllers
                 JSONInput? jsonInput = JsonSerializer.Deserialize<JSONInput>(requestBody);
                 if (jsonInput == null) return BadRequest();
                 AppData.JsonInput = jsonInput;
-                TestVectorViewModel asd = new()
-                {
-                    Labels = new List<string>() { "Id", "Temperature", "Drainage" },
-                    TestVectors = new List<TestVector>() {
-                        new TestVector{Id = 1, SelectedInput = new List<SelectedInput>()
-                            {
-                                new SelectedInput { InputConditionId = 1, Value = 1},
-                                new SelectedInput { InputConditionId = 2, Value = 8},
-                            }
-                        },
-                        new TestVector{Id = 2, SelectedInput = new List<SelectedInput>()
-                            {
-                                new SelectedInput { InputConditionId = 1, Value = 10},
-                                new SelectedInput { InputConditionId = 2, Value = 7},
-                            }
-                        }
-                    }
-                };
-                return Ok(asd);
+                List<string> labels = new List<string>() { "Id" };
+                labels.AddRange(IInputCondition.GetAll().Select(x => x.Parameter));
+                //TestVectorViewModel asd = new()
+                //{
+                //    Labels = new List<string>() { "Id", "Temperature", "Drainage" },
+                //    TestVectors = new List<TestVector>() {
+                //        new TestVector{Id = 1, SelectedInput = new List<SelectedInput>()
+                //            {
+                //                new SelectedInput { InputConditionId = 1, Value = 1},
+                //                new SelectedInput { InputConditionId = 2, Value = 8},
+                //            }
+                //        },
+                //        new TestVector{Id = 2, SelectedInput = new List<SelectedInput>()
+                //            {
+                //                new SelectedInput { InputConditionId = 1, Value = 10},
+                //                new SelectedInput { InputConditionId = 2, Value = 7},
+                //            }
+                //        }
+                //    }
+                //};
+                return Ok(new TestVectorViewModel { Labels = labels, TestVectors = ITestVector.GenerateAll(ISample.GetAll(), jsonInput.TestPointCollections) }); ;
             }
             catch { return BadRequest(); }
         }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Constraints;
 using Models;
 using Services;
+using System.IO;
 using System.IO.Compression;
 using System.Reflection.Metadata.Ecma335;
 
@@ -25,61 +26,48 @@ namespace STEMApi.Controllers
             IWebHostEnvironment = iWebHostEnvironment;
         }
 
+        /// <summary>
+        /// Method to export all TestVectors for all samples in a single .csv file
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public IActionResult Export()
+        public IActionResult ExportAll()
         {
             List<string> fileNames = new List<string>();
+            string fileName = "export" + DateTime.Now.ToString("ddmmyyyyHHmmss") + ".csv";
+            string path = Path.Combine(IWebHostEnvironment.ContentRootPath, "Files", fileName);
             foreach (Sample sample in ISample.GetAll())
             {
-                string fileName = Path.Combine(IWebHostEnvironment.ContentRootPath, "Files", "test.csv");
-                ICsvService.SaveToCsv(fileName, sample.Name, new List<string> { "Id", "temp", "drain" }, AppData.TestVectors.Where(x => x.SampleId == sample.Id).ToList());
+                ICsvService.SaveToCsv(path, sample.Name, new List<string> { "Id", "temp", "drain" }, AppData.TestVectors.Where(x => x.SampleId == sample.Id).ToList());
             }
-            return Ok();
-        }
-
-        [HttpGet]
-        public IActionResult ExportSingle(int sampleId)
-        {
-            List<TestVector> vector = new List<TestVector>() {
-                        new TestVector{Id = 1, SelectedInput = new List<SelectedInput>()
-                            {
-                                new SelectedInput { InputConditionId = 1, Value = 1},
-                                new SelectedInput { InputConditionId = 2, Value = 8},
-                            }
-                        },
-                        new TestVector{Id = 2, SelectedInput = new List<SelectedInput>()
-                            {
-                                new SelectedInput { InputConditionId = 1, Value = 10},
-                                new SelectedInput { InputConditionId = 2, Value = 7},
-                            }
-                        }
-                    };
-
-            ICsvService.SaveToCsv(Path.Combine(IWebHostEnvironment.ContentRootPath, "Files", "test.csv"), "Sample1", new List<string> { "Id", "temp", "drain" }, vector/*AppData.TestVectors.Where(x => x.SampleId == sampleId).ToList()*/);
-            string fileName = ZipFiles(new List<string> { Path.Combine(IWebHostEnvironment.ContentRootPath, "Files", "test.csv") });
-            return Ok("Files/" + fileName);
+            return Ok("Files" + fileName);
         }
 
         /// <summary>
-        /// Zips a list of files
+        /// Export's all the TestVectors for a single sample
         /// </summary>
-        /// <param name="fileNames">The list of files to save to a zip file</param>
-        /// <returns>The path of the zip file</returns>
-        [NonAction]
-        private string ZipFiles(List<string> fileNames)
+        /// <param name="sampleId">The sample's Id to which export the TestVectors</param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult ExportSingle(int sampleId)
         {
-            string fileName = Path.Combine(IWebHostEnvironment.ContentRootPath, "Files", "export" + DateTime.Now.ToString("dd.mm.yyyy-HH:mm:ss") + ".zip");
-            using (FileStream fileStream = new FileStream(fileName, FileMode.Create)) { }
-            using (FileStream zipToOpen = new FileStream(fileName, FileMode.Open))
-            {
-                using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
-                {
-                    foreach(string file in fileNames)
-                        // Add files to the archive
-                        archive.CreateEntry(Path.GetFileName(file));
-                }
-            }
-            return fileName;
+            //List<TestVector> vector = new List<TestVector>() {
+            //            new TestVector{Id = 1, SelectedInput = new List<SelectedInput>()
+            //                {
+            //                    new SelectedInput { InputConditionId = 1, Value = 1},
+            //                    new SelectedInput { InputConditionId = 2, Value = 8},
+            //                }
+            //            },
+            //            new TestVector{Id = 2, SelectedInput = new List<SelectedInput>()
+            //                {
+            //                    new SelectedInput { InputConditionId = 1, Value = 10},
+            //                    new SelectedInput { InputConditionId = 2, Value = 7},
+            //                }
+            //            }
+            //        };
+            string fileName = "export" + DateTime.Now.ToString("ddmmyyyyHHmmss") + ".csv";
+            ICsvService.SaveToCsv(Path.Combine(IWebHostEnvironment.ContentRootPath, "Files", fileName), "Sample1", new List<string> { "Id", "temp", "drain" }, /*vector*/AppData.TestVectors.Where(x => x.SampleId == sampleId).ToList());
+            return Ok("Files/" + fileName);
         }
     }
 }

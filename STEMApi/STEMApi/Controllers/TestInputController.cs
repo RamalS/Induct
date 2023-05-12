@@ -14,6 +14,10 @@ namespace STEMApi.Controllers
             IInputCondition = iInputCondition;
         }
 
+        /// <summary>
+        /// Returns all the input conditions
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetAll()
         {
