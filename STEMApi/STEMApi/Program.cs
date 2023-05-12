@@ -1,4 +1,5 @@
 using Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,8 @@ builder.Services.AddScoped<IInputCondition, InputConditionService>();
 builder.Services.AddScoped<ISample, SampleService>();
 builder.Services.AddScoped<ITestVector, TestVectorService>();
 
+builder.Services.AddCors();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,6 +24,10 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 //}
+
+app.UseCors(x => x.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader());
 
 app.UseHttpsRedirection();
 

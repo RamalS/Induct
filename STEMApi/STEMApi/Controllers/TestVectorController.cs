@@ -31,7 +31,7 @@ namespace STEMApi.Controllers
             }
          }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult GetAll(List<TestInputCollection> testInputCollection)
         {
             List<TestVector> testVectors = new List<TestVector>();
@@ -58,8 +58,7 @@ namespace STEMApi.Controllers
             }
 
 
-            //return Ok(testVectors);
-            return Ok();
+            return Ok(testVectors);
         }
     }
 }
