@@ -5,5 +5,5 @@ export interface TestPoint {
 }
 
 export interface TestPointJson {
-    file: FileList;
+    file: File;
 }
