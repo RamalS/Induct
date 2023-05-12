@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { FileForm } from "../../../components/FileForm/FileForm";
 import { useForm } from "react-hook-form";
-import { TestPointJson } from "../../../ModelTypes";
+import { TestPointJson, TestVectorJson } from "../../../ModelTypes";
 import { File } from "../../../components/File/File";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { withTestVectors } from "../../../recoil/TestVector/atom";
+import { useNavigate } from "react-router-dom";
+import { TestVector } from "../../../ModelTypes";
 
 export const UploadJson = () => {
   const uploadUrl = "https://dev.digitando-server.com.hr/api/Data/UploadFile";
-  const [file, setFile] = useState<FileList>();
+  const [vectors, setVectors] = useRecoilState(withTestVectors);
+  const navigate = useNavigate();
 
   const uploadJsonAsync = async (model: TestPointJson) => {
     if (model.file === undefined) {
@@ -18,9 +23,6 @@ export const UploadJson = () => {
 
     const formData = new FormData();
     formData.append("files", model.file);
-    // for (let i = 0; i < files.length; i++) {
-    //   formData.append("files", files[i]);
-    // }
 
     console.log(formData, model, "formData model");
 
@@ -33,6 +35,10 @@ export const UploadJson = () => {
       .then((x) => x.data);
   };
 
+  useEffect(() => {
+    console.log(vectors, "vectors");
+  }, [vectors]);
+
   const {
     reset,
     control,
@@ -44,24 +50,6 @@ export const UploadJson = () => {
     defaultValues: {},
   });
 
-  // useEffect(() => {
-  //   const file = watch("file");
-  //   setFile(file);
-  // }, [watch("file")]);
-
-  // useEffect(() => {
-  //   if (file !== undefined) {
-  //     console.log(file, "file");
-  //     uploadJsonAsync({ file })
-  //       .then((x) => {
-  //         console.log(x, "x");
-  //       })
-  //       .catch((err) => {
-  //         console.log(err, "err");
-  //       });
-  //   }
-  // }, [file]);
-
   return (
     <>
       <div>
@@ -72,6 +60,8 @@ export const UploadJson = () => {
             console.log(file, "file");
             uploadJsonAsync({ file: file as File }).then((x) => {
               console.log(x, "x");
+              setVectors(x as TestVectorJson);
+              navigate("/generated-vectors");
             });
           }}
         />

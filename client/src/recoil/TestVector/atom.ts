@@ -1,6 +1,7 @@
 import { atom } from 'recoil';
+import { TestVector, TestVectorJson } from '../../ModelTypes';
 
-export const withUser = atom({
+export const withTestVectors = atom({
     key: 'testVectors',
-    default: []
+    default: {labels: [], testVectors: []} as TestVectorJson,
 });
